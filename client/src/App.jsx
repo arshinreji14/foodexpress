@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 import Header from "./components/Layout/Header";
-import ProtectedRoute from "./components/Layout/ProtectedRoute";
 import HomePage from "./pages/HomePage";
 import OtpLoginPage from "./pages/OtpLoginPage";
 import CheckoutPage from "./pages/CheckoutPage";
@@ -20,9 +19,7 @@ export default function App() {
             <Route path="/login" element={<OtpLoginPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/order/:id" element={<OrderStatusPage />} />
-            <Route element={<ProtectedRoute />}>
-              <Route path="/orders" element={<OrdersListPage />} />
-            </Route>
+            <Route path="/orders" element={<OrdersListPage />} />
           </Routes>
         </div>
       </CartProvider>

@@ -5,6 +5,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import CheckoutForm from "../components/Checkout/CheckoutForm";
 import { CartProvider, useCart } from "../context/CartContext";
 import * as orderApi from "../api/orderApi";
+import { getStoredOrderIds } from "../utils/orderHistory";
 
 vi.mock("../api/orderApi");
 
@@ -39,6 +40,7 @@ function renderForm() {
 describe("CheckoutForm", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    localStorage.clear();
   });
 
   it("shows validation errors when required fields are empty", async () => {
@@ -87,6 +89,7 @@ describe("CheckoutForm", () => {
       });
     });
     expect(navigateMock).toHaveBeenCalledWith("/order/42");
+    expect(getStoredOrderIds()).toEqual([42]);
   });
 
   it("shows a server error message when the API call fails", async () => {

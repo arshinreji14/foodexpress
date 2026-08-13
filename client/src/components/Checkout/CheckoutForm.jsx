@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import { placeOrder } from "../../api/orderApi";
+import { addStoredOrderId } from "../../utils/orderHistory";
 
 const PHONE_REGEX = /^[0-9+\-\s()]{7,20}$/;
 
@@ -49,6 +50,7 @@ export default function CheckoutForm() {
           quantity: entry.quantity,
         })),
       });
+      addStoredOrderId(order.id);
       navigate(`/order/${order.id}`);
     } catch (err) {
       setSubmitError(

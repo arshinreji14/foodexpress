@@ -7,8 +7,13 @@ cart, check out, and track order status in real time.
 - **Backend**: Node.js + Express + Prisma + MySQL
 - **Auth**: optional. Checkout works as a guest (no login) exactly as the
   brief describes — name/address/phone are entered per order. Logging in
-  (passwordless email OTP) is a bonus on top: it lets you see a "My Orders"
-  history across visits, nothing more is gated behind it
+  (passwordless email OTP) is a bonus on top: it ties order history to your
+  account across devices instead of just this browser, nothing more is
+  gated behind it
+- **Order history**: "My Orders" works for everyone. Guests get a history
+  scoped to their browser (order ids kept in `localStorage`); logged-in
+  users get a history scoped to their account (kept server-side), so it
+  follows them across devices
 - **Real-time**: Socket.IO (simulates status progression on the server)
 - **Testing**: Jest + Supertest (backend), Vitest + React Testing Library (frontend)
 

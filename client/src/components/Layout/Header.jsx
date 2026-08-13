@@ -24,12 +24,14 @@ export default function Header() {
           {totalItems === 1 ? "" : "s"}
         </span>
 
+        <Link to="/orders" className="text-slate-700 hover:text-orange-500">
+          My Orders
+        </Link>
+
+        <span className="text-slate-400">|</span>
+
         {isAuthenticated ? (
           <>
-            <Link to="/orders" className="text-slate-700 hover:text-orange-500">
-              My Orders
-            </Link>
-            <span className="text-slate-400">|</span>
             <span className="text-slate-700">Hi, {user.name}</span>
             <button
               type="button"

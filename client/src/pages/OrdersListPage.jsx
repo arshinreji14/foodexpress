@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { fetchOrders } from "../api/orderApi";
+import { fetchOrder, fetchOrders } from "../api/orderApi";
+import { useAuth } from "../context/AuthContext";
+import { getStoredOrderIds } from "../utils/orderHistory";
 
 const STATUS_LABELS = {
   RECEIVED: "Order Received",
@@ -10,13 +12,20 @@ const STATUS_LABELS = {
 };
 
 export default function OrdersListPage() {
+  const { isAuthenticated } = useAuth();
   const [orders, setOrders] = useState([]);
   const [status, setStatus] = useState("loading");
 
   useEffect(() => {
     let isMounted = true;
 
-    fetchOrders()
+    const load = isAuthenticated
+      ? fetchOrders()
+      : Promise.all(getStoredOrderIds().map((id) => fetchOrder(id).catch(() => null))).then(
+          (results) => results.filter(Boolean)
+        );
+
+    load
       .then((data) => {
         if (isMounted) {
           setOrders(data);
@@ -30,11 +39,21 @@ export default function OrdersListPage() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
       <h1 className="mb-6 text-2xl font-bold text-slate-900">My Orders</h1>
+
+      {!isAuthenticated && (
+        <p className="mb-4 text-sm text-slate-500">
+          Showing orders placed from this browser.{" "}
+          <Link to="/login" className="text-orange-500 hover:underline">
+            Log in
+          </Link>{" "}
+          to keep a history tied to your account instead.
+        </p>
+      )}
 
       {status === "loading" && <p className="text-slate-500">Loading your orders...</p>}
       {status === "error" && (
